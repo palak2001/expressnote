@@ -6,4 +6,6 @@ app.get('/', (req,res) => {
     res.end();
 });
 
-app.listen(8000, () => { console.log('Listening to the port 8000.....')});
+const port= process.env.PORT || 8000;
+
+app.listen(port, () => { console.log(`Listening to the port ${port}.....`)})
