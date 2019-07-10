@@ -8,6 +8,8 @@ const courses= [
     { id:4 , name: 'vishal'},
 ];
 
+app.use(express.json());
+
 app.get('/', (req,res) => {
     res.send('Heyyyaa :p');
     res.end();
@@ -22,6 +24,15 @@ app.get('/api/courses/:id', (req,res) => {
     if(!course)
     res.status(404);
     else
+    res.send(course);
+})
+
+app.post('/api/courses', (req,res) =>{
+    const course={
+        id: courses.length +1 ,
+        name: req.body.name
+    };
+    courses.push(course);
     res.send(course);
 })
 
