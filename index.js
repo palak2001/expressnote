@@ -11,11 +11,14 @@ const courses= [
 ];
 
 app.use(express.json());
+//express.json is a middleware funtion
+//It looks into the body of request and if there s a json fike, it returns it to response as json object
 
 app.get('/', (req,res) => {
     res.send('Heyyyaa :p');
     res.end();
 });
+//Second argument to get funtion is also another middleware function as it takes a complete req-res cycle
 
 app.get('/api/courses', (req, res) => {
     res.send(courses);
