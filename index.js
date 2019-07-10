@@ -1,5 +1,7 @@
+const Joi= require('joi');
 const express= require('express');
 const app= express();
+
 
 const courses= [
     { id:1 , name: 'palak'},
@@ -17,7 +19,7 @@ app.get('/', (req,res) => {
 
 app.get('/api/courses', (req, res) => {
     res.send(courses);
-})
+});
 
 app.get('/api/courses/:id', (req,res) => {
     const course = courses.find( c => c.id===parseInt(req.params.id));
@@ -25,16 +27,23 @@ app.get('/api/courses/:id', (req,res) => {
     res.status(404);
     else
     res.send(course);
-})
+});
 
-app.post('/api/courses', (req,res) =>{
+app.post('/api/courses', (req,res) => {
+    
+
+    const schema={
+        name: Joi.string.min(3).required()
+    };
+    const result = Joi.validate(req.body, schema);
+    
     const course={
         id: courses.length +1 ,
         name: req.body.name
     };
     courses.push(course);
     res.send(course);
-})
+});
 
 const port= process.env.PORT || 8000;
 
