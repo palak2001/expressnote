@@ -1,53 +1,54 @@
-const Joi= require('joi');
-const express= require('express');
+const express= require(express());
 const app= express();
-
-
-const courses= [
-    { id:1 , name: 'palak'},
-    { id:2 , name: 'naresh'},
-    { id:3 , name: 'saroj'},
-    { id:4 , name: 'vishal'},
-];
+const port= process.env.PORT||3000;
 
 app.use(express.json());
-//express.json is a middleware funtion
-//It looks into the body of request and if there s a json fike, it returns it to response as json object
-
+//receiving the home page
 app.get('/', (req,res) => {
-    res.send('Heyyyaa :p');
-    res.end();
-});
-//Second argument to get funtion is also another middleware function as it takes a complete req-res cycle
-
-app.get('/api/courses', (req, res) => {
-    res.send(courses);
+    res.write("Welcome to the home page");
 });
 
-app.get('/api/courses/:id', (req,res) => {
-    const course = courses.find( c => c.id===parseInt(req.params.id));
-    if(!course)
-    res.status(404);
+//viewing the list of villas
+app.get('/api/villas', (req,res)=>{
+    if(!villas)
+    res.send(404);
     else
-    res.send(course);
+    res.send(villas);
 });
 
-app.post('/api/courses', (req,res) => {
-    
-
-    const schema={
-        name: Joi.string.min(3).required()
-    };
-    const result = Joi.validate(req.body, schema);
-    
-    const course={
-        id: courses.length +1 ,
-        name: req.body.name
-    };
-    courses.push(course);
-    res.send(course);
+//viewing a particular villa wth given id
+app.get('.api/villas/:id', (req,res)=>{
+    const villa= villas.find(v=> v.id===parseInt(villas.params.id));
+    if(!villa)
+    res.send(404);
+    else
+    res.send(villa);
 });
 
-const port= process.env.PORT || 8000;
+//creating the new villa
+app.post('/api/villas', (req,res)=>{
+    const villa={
+        id: villas.length() +1 ,
+        address: 'Heaven'
+    }
+    villas.push(villa);
+    res.send(villa);
+});
 
-app.listen(port, () => { console.log(`Listening to the port ${port}.....`)})
+//updating the value of a particular villa with given id
+app.put('/api/villas/:id', (req,res)=>{
+    const villa= villas.find(v=> v.id===parseInt(villas.params.id));
+    if(!villa)
+    res.send(404);
+    villa.address=req.body();
+    res.send(villa);
+});
+
+//deleting the villa info with given id
+app.delete('/api/villas/:id', (req,res)=>{
+    const villa= villas.find(v=> v.id===parseInt(villas.params.id));
+    if(!villa)
+    res.send(404);
+    //delete
+    res.send(villas);
+});
