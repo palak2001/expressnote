@@ -1,9 +1,10 @@
-
+const mongoose=require('mongoose');
 const express= require('express');
 const router=express.Router();
 const Joi= require('joi');
 const startupDebug= require('debug')('app: startup');
 
+/*
 const villas=[
     {
         id: 1,
@@ -21,31 +22,37 @@ const villas=[
         id: 4,
         address: 'Dead Sea'
     }
-];
+];*/
+
+const VillaSchema={
+    name: { type: String , required: true},
+    address: [ String ]
+}
+
+const Villa= mongoose.model('Villa', VillaSchema);
 
 //viewing the list of villas
-router.get('/', (req,res)=>{
-    if(!villas)
+router.get('/', async (req,res)=>{
+    const villa= await Villa.find().sort(name);
+    if(!villa)
     return res.send(404);
-    return res.send(villas);
+    return res.send(villa);
 });
 
 //viewing a particular villa wth given id
-router.get('/:id', (req,res)=>{
-    const villa= villas.find(v=> v.id===parseInt(villas.params.id));
+router.get('/:id', async (req,res)=>{
+    const villa= await Villa.findById(req.params.id);
     if(!villa)
     return res.send(404);
     return res.send(villa);
 });
 
 //creating the new villa
-router.post('/', (req,res)=>{
+router.post('/', async (req,res)=>{
     const {error}= validation(req.body);   
     if (error) return res.status(400).send(error.details[0].message);
-    const villa={
-        id: villas.length() +1 ,
-        address: req.body.address
-    }
+
+    const villa= Villa.create(req.params.id,{id: villas.length() +1, address: req.body.address});
     villas.push(villa);
     return res.send(villa);
 });
